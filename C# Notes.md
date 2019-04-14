@@ -32,7 +32,7 @@ PRIMATIVES (These are actually static objects in C#. They have properties and me
 	Unsigned: "byte"  < "ushort" < "uint" < "ulong" < "decimal" |
 			-----------------------------------------------------
 
-	The decimal has shorter range (-7.9 x 10^28 to 7.9 x 10^28) but more percision (28-29 significant digits) than the float (-3.4 x 10^38 to 3.4 x 10^38, 7 sig digits)
+	The decimal has shorter range (-7.9 x 10^28 to 7.9 x 10^28) but more percision (28-29 significant digits) than the float (-3.4 x 10^38 to 3.4 x 10^38, 7 sig digits). Remember to append an "m" at the end of the number.
 
 STATIC
 	A static class allows you to use properties and methods without instaniating it. For example, if you type in "string." you'll see left of static properties and methods, however if you type 'string str = "Hello."' and then "str.", you'll see a lot more methods and properties.
@@ -40,7 +40,9 @@ STATIC
 Hint: "String" and "string" are equivalent types. ("String" is how it is in Ja)
 
 STRINGS
+
 		var testString = " abCDefg  ";
+
 	- testString.Trim() --> "abCDefg"
 		- This will chop off the extra spaces at the begining and end.
 	- testString.TrimStart() --> "abCDefg  "
@@ -122,8 +124,15 @@ MATH
 	/	Division
 	%	Modulus
 
-	i++ 	Increment i by 1 and store value in i.
-	i-- 	Decrement i by 1 and store value in i.
+	Increment and Decrement
+	-----------------------
+	- There are several ways to increment and decrement values in C#. Below we will initialize the 
+	  value of i = 1 and j = 0.
+	j = i++ 	Take the value of i, store the value in j, then increment by 1. Result: j=1, i=2.
+	j = i-- 	Take the value of i, store the value in j, then decrement by 1. Result: j=1, i=0.
+	j = ++i  	Take the value of i, increment by 1, then store the value in j. Result: j=2, i=2.
+	j = --i     Take the value of i, decrement by 1, then store the value in j. Result: j=0, i=0.
+
 	i+=5	Increment i by 5 and store value in i.
 	i-=5	Decrement i by 5 and store value in i.
 	i*=5	Multiply i by 5 and store value in i.
@@ -168,9 +177,37 @@ NAMESPACES (Packages in Java)
 
 	When you are setting up references, the "using" key will be followed by the folder tree separated by ".".
 
-AUTO-IMPLEMENTED PROPERTIES - *Research more*
-	Used when you want to add encapsulation to your properties but there is no need for logic.
-		string Name { get; set; }
+CONDITIONALS
+	Conditionals
+		- if ([condition]) {[then statement]}
+		- switch ([value]) {
+			 case [1st possiblity]:
+			 	[statement];
+			 	break;
+			 case [2nd possiblity]:
+			 	[statement];
+			 	break;
+			 default:
+			 	[statement];
+			 	break;
+		  }
+
+AUTO-IMPLEMENTED PROPERTIES
+	Used when you want to add encapsulation to your properties but there is no need for logic/error checking. For example:
+	(1)	string name;
+
+		public string Name {	<-- Note: There are no parentheses for Get & Set Accessors.	
+			get {
+				return name;
+			}
+			set {
+				name = value; 	<-- Note: "value" is a special keyword for what ever is passed in when the set is called.
+			}
+		}
+	
+				VS
+
+	(2)	string Name { get; set; }	<-- This does not need a variable defined.
 
 PROPERTIES
 	The getters and setters are used so that no one can change variables to something invalid. When creating the getter and setter for a variable we follow this template:
@@ -190,6 +227,32 @@ PROPERTIES
 
 		- Backing Variable - Needed to contain the actual value set in the property declaration. Notice the 
 		- Magic Part - The value "value" is a keyword that is part of the language and is used when we have getters and setters for properties.
+
+
+
+LOOPS
+	Loops come in several different ways:
+	1) For Loop - 
+
+	2) While Loop -
+
+	3) Do While Loop -
+
+BREAK & CONTINUE
+	As in the case of Switch statements, the break keyword can be used to exit a loop. You can also use the continue keyword
+	to bypass the remaining statements in the loop and start the next cycle.
+
+	int i = 0;
+	int value = 0;
+
+	while (i < 10) {
+		if ( i == 5) continue;
+		if ( i == 7) break;
+		value += i;
+	}
+
+
+
 
 CONSTRUCTOR (ctor)
 	The point of a constructor is to handle initialization and they are named after the class. There are NO return types for constructors. You can add as many construtors to a class as necessary (overloaded). You just need to make sure that the method signature is different for each one. (Different number or types of arguments for each one.)
@@ -211,7 +274,7 @@ METHODS/FUNCTIONS
 
 	Static Methods:
 	---------------
-	When you add the word "static" to a method, we no longer need to instantiate it to use it. (No longer need to use the "new' keyword).
+	When you add the word "static" to a method, we no longer need to instantiate it to use it. (No longer need to use the "new' keyword). It belongs to a class verses being an object of the class. The Math class is a static class with static methods. You don't need to instanite a Math object to use its method.
 
 	Overriding ToString:
 	--------------------
@@ -223,6 +286,60 @@ METHODS/FUNCTIONS
 		}
 
 	Note: The "this" keyword is used to refer to properties of the class itself. So "this.Name" will refer to the Name variable in the class.
+
+	Overloading:
+	------------
+	By changing the parameter signature, you can overload a method.
+
+		public string Employee (string title) {...}
+		public string Employee (int id) {...}
+
+	When calling this method, you can change between an 'int' parameter or a 'string' parameter to have the same method do different things.
+
+	Named Arguments:
+	----------------
+	This is a different way of putting in parameters into a method call. Doing this will allow the parameters be placed out of sequence. For example if a method had the arguments: method(string name, int age, int height){...}. You can call the method like this: method (height:60, name:"Tony", age: 32).
+
+		Note: You can use named arguments with positional arguments BUT the named arguments have to go AFTER the postional if they are out of order. So using the above example: method("Tony", height:60, age:32) is valid but not, method(age:32, name:"Tony", 60).
+
+	Optional Arguments:
+	-------------------
+	To have a method with optional parameters, you must give the argument a default value. For example:
+
+		person(string name = "Tony", int age = 18, int height = 59) {...}
+
+	This method you can call by just saying person(), which will using the default values, or you can specify by doing person("Alex",25), which will use Alex for the name, 25 for the age and the default value of 59 for the height. If you want to use define specific parameters, use the Named argument as above: person(height: 68).
+
+	See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/named-and-optional-arguments
+
+	OUT and REF Keywords:
+	---------------------
+	When using 'ref' or 'out', the method gains access to the original memory location of a variable and changes that. This is not normally the case because when calling a method, a new location in memory is used to store the new value that the method returns. By doing this, any where that variable is used will also change.
+
+	The 'out' keyword is used in a 'void' method along with an argument to return that argument's value. For example:
+
+		public static void NumberOut(out int myNumber) {
+			myNumber = 90;
+		} --> this method will return an int 90.
+
+	When calling the method, you DO NOT have to initialize the value when using 'out'. Note: 'out' also needs to be used in the method call.
+
+		int number1;
+		NumberOut(out number1);
+		Assert.That(number1,Is.Equal(90)); <-- this will be true since the memory location of number1 was changed.
+
+
+	The 'ref' keyword is used when we want to explicitly pass an argument by reference. For example:
+
+		public static void NumberOut(ref int myNumber) {
+			myNumber = 90;
+		} 
+
+	When calling the method, you DO have to initialize the value when using 'ref'.
+
+		int number1 = 0;
+		NumberOut(ref number1);
+		Assert.That(number1,Is.Equal(90)); <-- this will also be true since the memory location of number1 was changed.
 
 INHERITANCE
 	You can setup classes so they inherit from one another. By doing this, you don't duplicate code. To set up inheritance you have to make a new class and refer to it by using a ":"
@@ -337,6 +454,10 @@ ARRAYS
 		var myList[3] = "full.";
 		var myList[4] = "Not!"; 	--> This will give an "Index out of bounds" error
 
+		var[] myList = {"My", "belly", "is", "full", "Not!"}
+
 		var myList = new string [4] {"My", "belly", "is", "full"};
 
 	To resize use: Array.Resize(ref myList, 6)
+	To sort use: Array.Sort(myList);
+	To reverse, use: Array.Reverse(myList);

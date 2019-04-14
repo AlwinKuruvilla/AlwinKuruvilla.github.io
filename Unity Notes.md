@@ -1,89 +1,86 @@
-UNITY NOTES:
-============
+# UNITY NOTES
 
-Classes and Methods:
---------------------
-GetComponent<T>()
-	This allows us to retrieve the component of type T when the script is attached to a GameObject.
+## Classes and Methods:
 
-	Types cover in lecture:
-	- Rigidbody
-		- AddForce(Vector3, ForceMode) - This is a physics method can be applied to a Rigidbody.
+**GetComponent<T>():**	This allows us to retrieve the component of type T when the script is attached to a GameObject.
 
-	- AudioSource
+Types covered in lecture
+- Rigidbody
+- AddForce(Vector3, ForceMode) - This is a physics method can be applied to a Rigidbody.
+- AudioSource
 
-Instantiate(Object)
-	This will allow us to clone the object.
+**Instantiate(Object)**
+:	This will allow us to clone the object.
+```csharp
+public class SpawnPoint : MonoBehaviour {
 
-	public class SpawnPoint : MonoBehaviour {
-		public GameObject ObjectToSpawn;
-		public Transform SpawnLocation;
+	public GameObject ObjectToSpawn;
+	public Transform SpawnLocation;
 
-		void Start() {
-			InvokeRepeating ("GenerateObject", 0f, 2f);
-		}
-
-		public void GenerateObject() {
-			Instantiate (ObjectToSpawn, SpawnLocation.position, transform.rotation);
-		}
+	void Start() {
+		InvokeRepeating ("GenerateObject", 0f, 2f);
 	}
 
-Delete(Object)
-	This script is attached to an empty game object and will delete the cloned object from above
+	public void GenerateObject() {
+		Instantiate (ObjectToSpawn, SpawnLocation.position, transform.rotation);
+	}
+}
+```
+**Delete(Object)**
+:	This script is attached to an empty game object and will delete the cloned object from above
 
-	public class ObjectDelete : MonoBehaviour {
-		public string DeleteTag = string.Empty;
+```csharp
+public class ObjectDelete : MonoBehaviour {
 
-		// Use this for initialization
-		void Start() {
-			InvokeRepeating("DeleteObjectsOfTag", 0f, 2f);
-		}
+	public string DeleteTag = string.Empty;
 
-		public void DeleteObjectsOfTag() {
-			GameObject[] MyObjects = GameObject.FindGameObjectsWithTag(DeleteTag);
-
-			for (int i = 0; i < MyObjects.Length; i++) {
-				Destroy(MyObjects[i]);
-			}
-		}
+	// Use this for initialization
+	void Start() {
+		InvokeRepeating("DeleteObjectsOfTag", 0f, 2f);
 	}
 
-Camera.ScreenPointToRay(Input)
-	This will draw a ray based on where the input is. For example if the input is Input.mousePosition, then it will create a ray to everything that the mouse will mouse point
+	public void DeleteObjectsOfTag() {
+		GameObject[] MyObjects = GameObject.FindGameObjectsWithTag(DeleteTag);
 
-Color.*
-	This allows you to get a color.
-
-Input.*
-	This allows you to get input from your peripherals.
-
-Quaterion.*
-	Allows us to construct quaterions.
-	- Euler = gives us a rotation in this order: Z-axis, X-axis, then Y-axis.
-	- FromToRotation = give it 2 directions (fromDirection & toDirection) and it will tell how to get to those directions
-	- AngleAxis = define an axis and how many degrees to rotate around that access.
-	- LookRotation = Creates a rotation with the specified forward and upwards directions.
-
-Physics:
---------
-FixedUpdate():
-	In Unity, we have Update that is done every frame and then we have FixedUpdate(), which is done only after a fixed amount time. This timing can be found in {Edit --> Project Setting --> Time} under "Fixed Timestap." 
-
-	Now FixedUpdate() happens before Update() in the execution order but it can occur several times in one frame for slow frame rates or can not be executed at all in high frame rates.
-
-	When applying movement calculations inside FixedUpdate(), you do not need to multiply your values by Time.deltaTime. This is because FixedUpdate() is called on a reliable timer, independent of the frame rate.
-
-	Ex:
-
-	void FixedUpdate () {
-			Rigidbody rb = GetComponent<Rigidbody>();
-			rb.AddForce(new Vector3(0,0,force)); // Note: You have to apply this to a Rigidbody.
+		for (int i = 0; i < MyObjects.Length; i++) {
+			Destroy(MyObjects[i]);
 		}
+	}
+}
+```
+**Camera.ScreenPointToRay(Input)**
+:	This will draw a ray based on where the input is. For example if the input is Input.mousePosition, then it will create a ray to everything that the mouse will mouse point
 
-Distances and Loops:
---------------------
+Color.* = This allows you to get a color.
 
+Input.* = This allows you to get input from your peripherals.
+
+Quaterion.* = Allows us to construct quaterions.
+- Quaterion.Euler = gives us a rotation in this order: Z-axis, X-axis, then Y-axis.
+- Quaterion.FromToRotation = give it 2 directions (fromDirection & toDirection) and it will tell how to get to those directions
+- Quaterion.AngleAxis = define an axis and how many degrees to rotate around that access.
+- Quaterion.LookRotation = Creates a rotation with the specified forward and upwards directions.
+
+## Physics
+
+**FixedUpdate():** In Unity, we have Update that is done every frame and then we have FixedUpdate(), which is done only after a fixed amount time. This timing can be found in {Edit --> Project Setting --> Time} under "Fixed Timestap." 
+
+Now FixedUpdate() happens before Update() in the execution order but it can occur several times in one frame for slow frame rates or can not be executed at all in high frame rates.
+
+When applying movement calculations inside FixedUpdate(), you do not need to multiply your values by Time.deltaTime. This is because FixedUpdate() is called on a reliable timer, independent of the frame rate.
+
+Ex:
+```csharp
+void FixedUpdate () {
+	Rigidbody rb = GetComponent<Rigidbody>();
+	rb.AddForce(new Vector3(0,0,force)); // Note: You have to apply this to a Rigidbody.
+}
+```
+## Distances and Loops:
+
+```csharp
 public class MoveToWayPoint : MonoBehaviour {
+
 	private GameObject[] Waypoints;
 	private NavMeshAgent Agent;
 
@@ -111,11 +108,10 @@ public class MoveToWayPoint : MonoBehaviour {
 		return Nearest;
 	}
 }
-
-Coroutines:
------------
+```
+## Coroutines:
 Functions that run asynchronously and in parallel.
-
+```csharp
 	public class Mover : MonoBehaviour {
 		void Start() {
 			StartCoroutine(Move());
@@ -128,9 +124,10 @@ Functions that run asynchronously and in parallel.
 			}
 		}
 	}
+```
+## Animation:
 
-Animation:
-----------
+```csharp
 public class AnimTrigger : MonoBehaviour 
 {
 	public Animator TargetAnimator = null;
@@ -141,3 +138,10 @@ public class AnimTrigger : MonoBehaviour
 		TargetAnimator.SetTrigger (TriggerName);
 	}
 }
+```
+## Creating a NavMesh
+To create the Player as a NavMeshAgent:
+
+1. Go to Window --> AI --> Navigation.
+2. On the "Bake" tab, select the default settings and click "Bake".
+3. Go to the Player object, add a "NavMeshAgent" component.
